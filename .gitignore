@@ -1,0 +1,9 @@
+.idea
+node_modules
+
+fe/node_modules
+fe/.nuxt
+
+be/node_modules
+be/.env
+
