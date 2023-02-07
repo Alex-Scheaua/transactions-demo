@@ -1,15 +1,16 @@
 {
   "name": "transactions-be",
   "version": "1.0.0",
-  "prisma": {
-    "seed": "ts-node prisma/seed.ts"
-  },
   "main": "main.ts",
   "type": "module",
   "license": "MIT",
+  "prisma": {
+    "seed": "ts-node prisma/seed.ts"
+  },
   "scripts": {
     "start": "nodemon main.ts",
-    "migrate": "npx prisma migrate dev"
+    "migrate": "npx prisma migrate dev",
+    "seed": "npx prisma db seed"
   },
   "devDependencies": {
     "@types/node": "^18.11.18",
