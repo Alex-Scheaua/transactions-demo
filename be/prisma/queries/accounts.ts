@@ -7,6 +7,6 @@ export const getAccounts = () => {
 export const getBanks = () => {
     return prisma.account.findMany({
         distinct: ['bank'],
-        select: {bank: true}
+        select: { bank: true }
     })
 }

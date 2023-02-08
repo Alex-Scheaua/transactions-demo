@@ -22,7 +22,7 @@ export const getTransactions = (args: TransactionFilterFields) => {
                     ]
                 } : null,
                 args.bank ? {account: {is: {bank: args.bank}}} : null,
-                args.account ? {accountId: {is: args.account}} : null,
+                args.account ? {accountId: {equals: args.account}} : null,
                 args.startDate ? {date: {gt: args.startDate}} : null,
                 args.endDate ? {date: {lt: args.endDate}}: null
             ],
