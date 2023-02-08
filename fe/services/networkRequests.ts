@@ -1,21 +1,37 @@
-import {ApolloClient, InMemoryCache, gql} from '@apollo/client/core'
+import { ApolloClient, InMemoryCache, gql } from '@apollo/client/core'
 import 'cross-fetch/polyfill';
 import type { TransactionFilterFields } from "~/interfaces";
 
 const client = new ApolloClient({
-    uri: 'http://localhost:4000', cache: new InMemoryCache(),
+    uri: 'http://localhost:4000',
+    cache: new InMemoryCache(),
 });
 
 export const transactions = async (filter: TransactionFilterFields) => {
     return await client.query({
-        query: gql`query {
+        query: gql`query GetTransactions(
+            $string: String
+            $filteredAccounts: [String]
+            $filteredCategories: [String]
+            $filteredBanks: [String]
+            $bank: String
+            $account: String
+            $startDate: Date
+            $endDate: Date
+            $sort: String
+        ) {
             transactions(
-                search: "${filter.search || ""}"
-                bank: "${filter.bank || ""}"
-                account: "${filter.account || ""}"
-                startDate: "${filter.startDate || ""}"
-                endDate: "${filter.endDate || ""}"
-                sort: "${filter.sort || "desc"}"
+                search: {
+                    string: $string
+                    filteredAccounts: $filteredAccounts
+                    filteredCategories: $filteredCategories
+                    filteredBanks: $filteredBanks
+                }
+                bank: $bank
+                account: $account
+                startDate: $startDate
+                endDate: $endDate
+                sort: $sort
             ) {
                 id
                 accountId
@@ -26,11 +42,22 @@ export const transactions = async (filter: TransactionFilterFields) => {
                 date
             }
         }`,
+        variables: {
+            string: filter.search.string,
+            filteredAccounts: filter.search.filteredAccounts,
+            filteredCategories: filter.search.filteredCategories,
+            filteredBanks: filter.search.filteredBanks,
+            bank: filter.bank,
+            account: filter.account,
+            startDate: filter.startDate,
+            endDate: filter.endDate,
+            sort: filter.sort || 'desc',
+        }
     })
 }
 export const accounts = async () => {
     return await client.query({
-        query: gql`query {
+        query: gql`query GetAccounts {
             accounts {
                 id
                 name
@@ -42,7 +69,7 @@ export const accounts = async () => {
 
 export const banks = async () => {
     return await client.query({
-        query: gql`query {
+        query: gql`query GetBanks {
             banks {
                 bank
             }
@@ -51,7 +78,7 @@ export const banks = async () => {
 }
 export const categories = async () => {
     return await client.query({
-        query: gql`query {
+        query: gql`query GetCategories {
             categories {
                 id
                 name

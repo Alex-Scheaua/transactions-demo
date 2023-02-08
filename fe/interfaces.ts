@@ -9,12 +9,19 @@ export interface Transaction {
 }
 
 export interface TransactionFilterFields {
-    search?: String
-    bank?: String
-    account?: String
+    search: TransactionFilterFieldSearch
+    bank: string
+    account: string
     startDate?: Date
     endDate?: Date
-    sort?: 'desc' | 'asc'
+    sort: string
+}
+
+export interface TransactionFilterFieldSearch {
+    string: string,
+    filteredAccounts: string[]
+    filteredBanks: string[]
+    filteredCategories: string[]
 }
 
 export interface Category {

@@ -25,8 +25,15 @@ type Bank {
     bank: String
 }
 
+input Search {
+    string: String
+    filteredAccounts: [String]
+    filteredBanks: [String]
+    filteredCategories: [String]
+}
+
 type Query {
-    transactions(search: String, bank: String, account: String, startDate: Date, endDate: Date, sort: String): [Transaction]
+    transactions(search: Search, bank: String, account: String, startDate: Date, endDate: Date, sort: String): [Transaction]
     accounts: [Account]
     banks: [Bank]
     categories: [Category]
