@@ -1,30 +1,32 @@
 <template>
-    <table class="w-5/6 text-sm text-left text-gray-500 dark:text-gray-400 border border-gray-100">
-        <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
-        <tr>
-            <th class="px-6 py-3" scope="col">
-                Reference
-            </th>
-            <th class="px-6 py-3" scope="col">
-                Category
-            </th>
-            <th class="px-6 py-3" scope="col">
-                Date
-            </th>
-            <th class="px-6 py-3" scope="col">
-                Amount
-            </th>
-        </tr>
-        </thead>
-        <tbody>
-            <transaction-table-row
-                v-for="transaction in transactions"
-                :key="transaction.id"
-                :transaction="transaction"
-                :category="categories.find(category => category.id === transaction.categoryId)?.name"
-            />
-        </tbody>
-    </table>
+    <div class="flex flex-col overflow-y-scroll mb-6 w-5/6">
+        <table class="text-sm text-left text-gray-500">
+            <thead class="text-xs text-gray-700 uppercase">
+                <tr>
+                    <th class="border border-gray-100 bg-gray-50 px-6 py-3" scope="col">
+                        Reference
+                    </th>
+                    <th class="border border-gray-100 bg-gray-50 px-6 py-3" scope="col">
+                        Category
+                    </th>
+                    <th class="border border-gray-100 bg-gray-50 px-6 py-3" scope="col">
+                        Date
+                    </th>
+                    <th class="border border-gray-100 bg-gray-50 px-6 py-3" scope="col">
+                        Amount
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <transaction-table-row
+                    v-for="transaction in transactions"
+                    :key="transaction.id"
+                    :transaction="transaction"
+                    :category="categories.find(category => category.id === transaction.categoryId)?.name"
+                />
+            </tbody>
+        </table>
+    </div>
 </template>
 
 <script lang="ts" setup>
@@ -43,5 +45,8 @@ const categories = computed(() => store.getters["store/categories"])
 </script>
 
 <style scoped>
-
+thead tr th {
+    position: sticky;
+    top: 0;
+}
 </style>
