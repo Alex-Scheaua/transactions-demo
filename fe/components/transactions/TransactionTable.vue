@@ -34,8 +34,8 @@ import { onMounted } from "vue"
 const { store } = useContext()
 
 onMounted(() => {
-    store.dispatch('store/getTransactions', {})
-    store.dispatch('store/getCategories', {})
+    store.dispatch('store/getTransactions')
+    store.dispatch('store/getCategories')
 })
 
 const transactions = computed(() => store.getters["store/transactions"])
