@@ -3,13 +3,14 @@
   "private": true,
   "version": "0.0.0",
   "scripts": {
-    "start": "concurrently \"yarn start-fe\" \"yarn start-be\"",
+    "start": "yarn compose && concurrently \"yarn start-fe\" \"yarn start-be\"",
     "start-fe": "yarn --cwd ./fe dev",
     "start-be": "yarn --cwd ./be start",
     "setup": "yarn setup-db && yarn -i && concurrently \"yarn setup-fe\" \"yarn setup-be\"",
     "setup-fe": "yarn --cwd ./fe -i",
     "setup-be": "yarn --cwd ./be -i",
-    "setup-db": "docker-compose -f db/compose-db.yml up -d && node migrate-db.js && yarn --cwd ./be seed"
+    "setup-db": "yarn compose && node migrate-db.js && yarn --cwd ./be seed",
+    "compose": "docker-compose -f db/compose-db.yml up -d"
   },
   "devDependencies": {
     "concurrently": "^7.6.0"
