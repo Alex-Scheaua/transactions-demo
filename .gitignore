@@ -5,7 +5,6 @@ fe/node_modules
 fe/.nuxt
 
 be/node_modules
-be/.env
 
 
 fe/.editorconfig
