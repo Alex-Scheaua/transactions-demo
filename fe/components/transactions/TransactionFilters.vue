@@ -69,6 +69,7 @@ import { onMounted, reactive } from "vue"
 import type { TransactionFilterFields } from "~/interfaces"
 import { banks } from "~/services/networkRequests"
 import { computed, useContext } from "@nuxtjs/composition-api";
+import debounce from "~/services/debounce";
 
 const { store } = useContext()
 
@@ -88,7 +89,7 @@ const accounts = computed(() => store.getters["store/accounts"])
 const banks = computed(() => store.getters["store/banks"])
 
 const searchTransactions = () => {
-    store.dispatch('store/getTransactions', filters)
+    debounce(() => store.dispatch('store/getTransactions', filters))
 }
 </script>
 
