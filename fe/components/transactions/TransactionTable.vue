@@ -17,19 +17,29 @@
         </tr>
         </thead>
         <tbody>
-            <transaction-table-row v-for="transaction in transactions" :key="transaction.id" :transaction="transaction"/>
+            <transaction-table-row
+                v-for="transaction in transactions"
+                :key="transaction.id"
+                :transaction="transaction"
+                :category="categories.find(category => category.id === transaction.categoryId)?.name"
+            />
         </tbody>
     </table>
 </template>
 
 <script lang="ts" setup>
 import TransactionTableRow from "~/components/transactions/TransactionTableRow.vue"
-import type { Category, Transaction } from "~/interfaces"
+import { computed, useContext } from "@nuxtjs/composition-api"
+import { onMounted } from "vue"
+const { store } = useContext()
 
-defineProps<{
-    transactions: Transaction[]
-    categories: Category[]
-}>()
+onMounted(() => {
+    store.dispatch('store/getTransactions', {})
+    store.dispatch('store/getCategories', {})
+})
+
+const transactions = computed(() => store.getters["store/transactions"])
+const categories = computed(() => store.getters["store/categories"])
 </script>
 
 <style scoped>

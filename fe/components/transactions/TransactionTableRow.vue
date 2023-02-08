@@ -4,7 +4,7 @@
             {{ transaction.reference }}
         </th>
         <td class="px-6 py-4">
-            {{ categories.find(category => category.id === transaction.categoryId).name }}
+            {{ category }}
         </td>
         <td class="px-6 py-4">
             {{ transaction.date }}
@@ -23,6 +23,7 @@ import type { Transaction } from "~/interfaces"
 
 defineProps<{
     transaction: Transaction
+    category: String
 }>()
 </script>
 

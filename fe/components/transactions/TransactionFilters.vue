@@ -23,7 +23,7 @@
                 name="currency"
             >
                 <option value="">All</option>
-                <option v-for="bankItem in bankList" :key="bankItem.bank" :value="bankItem.bank">
+                <option v-for="bankItem in banks" :key="bankItem.bank" :value="bankItem.bank">
                     {{bankItem.bank}}
                 </option>
             </select>
@@ -39,7 +39,7 @@
                 name="currency"
             >
                 <option value="">All</option>
-                <option v-for="account in accountsList" :key="account.id">
+                <option v-for="account in accounts" :key="account.id">
                     {{ account.name }}
                 </option>
             </select>
@@ -63,13 +63,11 @@
 
 <script lang="ts" setup>
 import {onMounted, reactive, ref} from "vue"
-import type { Account, TransactionFilterFields } from "~/interfaces"
+import type { TransactionFilterFields } from "~/interfaces"
 import { banks } from "~/services/networkRequests"
+import {computed, useContext} from "@nuxtjs/composition-api";
 
-const props = defineProps<{
-    accountsList: Account[]
-}>()
-const emit = defineEmits(['searchTransactions'])
+const { store } = useContext()
 
 const filters = <TransactionFilterFields>reactive({
     search: '',
@@ -81,15 +79,15 @@ const filters = <TransactionFilterFields>reactive({
 let bankList = ref([])
 
 onMounted(() => {
-    banks()
-        .then(({data}) => {
-            console.log(data);
-            bankList.value = data.banks
-        })
+    store.dispatch('store/getAccounts')
+    store.dispatch('store/getBanks')
 })
 
+const accounts = computed(() => store.getters["store/accounts"])
+const banks = computed(() => store.getters["store/banks"])
+
 const searchTransactions = () => {
-    emit('searchTransactions', filters)
+     store.dispatch('store/getTransactions', filters)
 }
 </script>
 
