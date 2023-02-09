@@ -65,17 +65,16 @@
 </template>
 
 <script lang="ts" setup>
-import { onMounted } from "vue"
-import type { Account, Category, TransactionFilterFields } from "~/interfaces"
+import type { Account, Category } from "~/interfaces"
 import { banks } from "~/services/networkRequests"
-import { computed, useContext } from "@nuxtjs/composition-api";
+import {computed, onServerPrefetch, useContext} from "@nuxtjs/composition-api";
 import debounce from "~/services/debounce";
 
 const { store } = useContext()
 
 const filters = computed(() => store.getters["store/filters"])
 
-onMounted(() => {
+onServerPrefetch(() => {
     store.dispatch('store/getAccounts')
     store.dispatch('store/getBanks')
 })

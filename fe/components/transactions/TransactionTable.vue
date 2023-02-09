@@ -43,13 +43,17 @@
 
 <script lang="ts" setup>
 import TransactionTableRow from "~/components/transactions/TransactionTableRow.vue"
-import { computed, useContext } from "@nuxtjs/composition-api"
-import { onMounted } from "vue"
+import {computed, onServerPrefetch, useContext} from "@nuxtjs/composition-api"
 const { store } = useContext()
 
-onMounted(() => {
-    store.dispatch('store/getTransactions')
-    store.dispatch('store/getCategories')
+onServerPrefetch(async () =>{
+    if(!transactions.value.length) {
+        await store.dispatch('store/getTransactions')
+    }
+    if(!categories.value.length) {
+        await store.dispatch('store/getCategories')
+    }
+
 })
 
 const transactions = computed(() => store.getters["store/transactions"])
