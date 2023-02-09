@@ -14,8 +14,8 @@ interface State {
     categories: Category[]
     accounts: Account[]
     banks: Bank[]
-
     filters: TransactionFilterFields
+    loading: boolean
 }
 
 export const state = () => (<State>{
@@ -33,7 +33,8 @@ export const state = () => (<State>{
         bank: '',
         account: '',
         sort: 'desc',
-    }
+    },
+    loading: false
 })
 
 export const getters = {
@@ -42,6 +43,7 @@ export const getters = {
     accounts: (state: State) => state.accounts,
     banks: (state: State) => state.banks,
     filters: (state: State) => state.filters,
+    loading: (state: State) => state.loading
 }
 
 export const mutations = {
@@ -57,11 +59,14 @@ export const mutations = {
         state.filters[key] = value
     },SET_SEARCH(state: State, search: TransactionFilterFieldSearch) {
         state.filters.search = search
+    },SET_LOADING(state: State, isLoading: boolean) {
+        state.loading = isLoading
     }
 }
 
 export const actions = {
     async getTransactions({commit, state}: { commit: Commit, state: State }) {
+        commit('SET_LOADING', true)
         try {
             const transactionsList = (await transactions(state.filters)).data.transactions
 
@@ -69,6 +74,7 @@ export const actions = {
         } catch (e) {
             console.error(e)
         }
+        commit('SET_LOADING', false)
     }, async getCategories({commit}: { commit: Commit }) {
         try {
             const categoriesList = (await categories()).data.categories
