@@ -1,7 +1,8 @@
+export type Id = string
 export interface Transaction {
-  id: string
-  accountId: string
-  categoryId: string
+  id: Id
+  accountId: Id
+  categoryId: Id
   reference: string
   amount: number
   currency: 'EUR' | 'GBP'
@@ -15,23 +16,24 @@ export interface TransactionFilterFields {
     startDate?: Date
     endDate?: Date
     sort: string
+    cursor?: Id
 }
 
 export interface TransactionFilterFieldSearch {
     string: string,
-    filteredAccounts: string[]
-    filteredBanks: string[]
-    filteredCategories: string[]
+    filteredAccounts: Id[]
+    filteredBanks: Id[]
+    filteredCategories: Id[]
 }
 
 export interface Category {
-    id: string
+    id: Id
     name: string
     color: string
 }
 
 export interface Account {
-    id: string
+    id: Id
     name: string
     bank: string
 }

@@ -1,17 +1,19 @@
 import { prisma } from "../prismaClient.js";
 
+type id = string
 export interface TransactionFilterFields {
     search: {
         string: string,
-        filteredAccounts: string[]
-        filteredBanks: string[]
-        filteredCategories: string[]
+        filteredAccounts: id[]
+        filteredBanks: id[]
+        filteredCategories: id[]
     }
     bank: string
     account: string
     startDate?: Date | null
     endDate?: Date | null
     sort: 'desc' | 'asc'
+    cursor: id
 }
 
 export const getTransactions = (args: TransactionFilterFields) => {
