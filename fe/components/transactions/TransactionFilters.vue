@@ -24,8 +24,8 @@
                 @change="searchTransactions('bank', $event.target.value)"
             >
                 <option value="">All</option>
-                <option v-for="bankItem in banks" :key="bankItem.bank" :value="bankItem.bank">
-                    {{bankItem.bank}}
+                <option v-for="bank in banks" :key="bank.name" :value="bank.name">
+                    {{bank.name}}
                 </option>
             </select>
         </div>
@@ -80,6 +80,9 @@ const banks = computed(() => store.getters["banks"])
 
 const searchTransactions = (key: 'bank'| 'account' | 'sort', value: string) => {
     store.dispatch('setFilter', {key, value})
+    if(key === 'bank') {
+        store.dispatch('setFilter', {key: 'banks',value: banks.value.find((bank) => bank.name === value)?.ids || []})
+    }
     debounce(() => store.dispatch('getTransactions'))
 }
 
@@ -95,7 +98,7 @@ const createFiltersAndSearch = (search: string) => {
 
         let filteredBanks = accounts.value
             .filter((account: Account) => account.bank.toLowerCase().includes(search.toLowerCase()))
-            .map((account: Account) => account.id)
+            .map((category: Category) => category.id)
 
         store.dispatch('setSearch', {
             string: search,

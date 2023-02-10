@@ -11,7 +11,8 @@ export interface Transaction {
 
 export interface TransactionFilterFields {
     search: TransactionFilterFieldSearch
-    bank: string
+    banks: string[]
+    bank: string,
     account: string
     startDate?: Date
     endDate?: Date
@@ -39,5 +40,6 @@ export interface Account {
 }
 
 export interface Bank {
-    bank: string
+    name: string
+    ids: Id[]
 }

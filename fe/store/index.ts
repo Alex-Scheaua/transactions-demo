@@ -34,6 +34,7 @@ export const state = () => (<State>{
             filteredBanks: [],
             filteredCategories: []
         },
+        banks: [],
         bank: '',
         account: '',
         sort: 'desc',
@@ -72,7 +73,7 @@ export const mutations = {
     SET_BANKS(state: State, banks: Bank[]) {
         state.banks = banks
     },
-    SET_FILTER(state: State, {key, value}: {key: 'bank'| 'account' | 'sort', value: string}) {
+    SET_FILTER(state: State, {key, value}: {key: 'banks'| 'account' | 'sort', value: string & string[]}) {
         state.filters[key] = value
     },
     SET_SEARCH(state: State, search: TransactionFilterFieldSearch) {
@@ -89,11 +90,19 @@ export const actions = {
         await dispatch('getCategories')
         await dispatch('getAccounts')
         await dispatch('getBanks')
+
     },
     async getTransactions({commit, state}: { commit: Commit, state: State }, loadMore: boolean) {
         commit('SET_LOADING', true)
         try {
-            const transactionsList = (await transactions(state.filters)).data.transactions
+            if(state.filters.bank) {
+                state.filters.banks = state.banks.find((bank: Bank) => bank.name === state.filters.bank)?.ids || []
+            }
+            const filters = {
+                ...state.filters,
+                cursor: loadMore ? state.filters.cursor : '',
+            }
+            const transactionsList = (await transactions(filters)).data.transactions
 
             commit('SET_TRANSACTIONS', { transactions: transactionsList, loadMore })
         } catch (e) {
@@ -110,6 +119,7 @@ export const actions = {
                     filteredBanks: [],
                     filteredCategories: []
                 },
+                banks: [],
                 bank: '',
                 account: '',
                 sort: 'desc',

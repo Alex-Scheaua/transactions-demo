@@ -22,7 +22,8 @@ type Category {
     color: String
 }
 type Bank {
-    bank: String
+    name: String
+    ids: [String]
 }
 
 input Search {
@@ -33,7 +34,7 @@ input Search {
 }
 
 type Query {
-    transactions(search: Search, bank: String, account: String, startDate: Date, endDate: Date, sort: String, cursor: String): [Transaction]
+    transactions(search: Search, banks: [String], account: String, startDate: Date, endDate: Date, sort: String, cursor: String): [Transaction]
     accounts: [Account]
     banks: [Bank]
     categories: [Category]

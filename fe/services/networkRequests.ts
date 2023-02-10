@@ -14,7 +14,7 @@ export const transactions = async (filter: TransactionFilterFields) => {
             $filteredAccounts: [String]
             $filteredCategories: [String]
             $filteredBanks: [String]
-            $bank: String
+            $banks: [String]
             $account: String
             $startDate: Date
             $endDate: Date
@@ -28,7 +28,7 @@ export const transactions = async (filter: TransactionFilterFields) => {
                     filteredCategories: $filteredCategories
                     filteredBanks: $filteredBanks
                 }
-                bank: $bank
+                banks: $banks
                 account: $account
                 startDate: $startDate
                 endDate: $endDate
@@ -49,7 +49,7 @@ export const transactions = async (filter: TransactionFilterFields) => {
             filteredAccounts: filter.search.filteredAccounts,
             filteredCategories: filter.search.filteredCategories,
             filteredBanks: filter.search.filteredBanks,
-            bank: filter.bank,
+            banks: filter.banks,
             account: filter.account,
             startDate: filter.startDate,
             endDate: filter.endDate,
@@ -74,7 +74,8 @@ export const banks = async () => {
     return await client.query({
         query: gql`query GetBanks {
             banks {
-                bank
+                name
+                ids
             }
         }`,
     })

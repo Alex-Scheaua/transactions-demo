@@ -1,51 +1,65 @@
 import { prisma } from "../prismaClient.js";
+import { Prisma } from "@prisma/client";
 
-type id = string
+type Id = string
 export interface TransactionFilterFields {
     search: {
         string: string,
-        filteredAccounts: id[]
-        filteredBanks: id[]
-        filteredCategories: id[]
+        filteredAccounts: Id[]
+        filteredBanks: Id[]
+        filteredCategories: Id[]
     }
-    bank: string
+    banks: string[]
     account: string
     startDate?: Date | null
     endDate?: Date | null
     sort: 'desc' | 'asc'
-    cursor: id
+    cursor: Id
 }
 
-export const getTransactions = (args: TransactionFilterFields) => {
-    const filter = {
-        where: {}
-    }
-
-    filter.where = {
-        AND: [
-            {
-                OR: [
-                    {id: {equals: args.search.string}},
-                    {reference: {contains: args.search.string, mode: 'insensitive'}},
-                    {amount: {equals:  parseFloat(args.search.string) || undefined}},
-                    {categoryId: {in:  args.search.filteredCategories},},
-                    {accountId: {in:  [...args.search.filteredBanks, ...args.search.filteredAccounts]}},
-                ]
-            },
-            args.bank ? {account: {is: {bank: args.bank}}} : null,
-            args.account ? {accountId: {equals: args.account}} : null,
-            args.startDate ? {date: {gt: args.startDate}} : null,
-            args.endDate ? {date: {lt: args.endDate}}: null
-        ],
-    }
-
+export const getTransactions = (filters: TransactionFilterFields) => {
     return prisma.transaction.findMany({
         take: 20,
-        cursor: args.cursor ? {id: args.cursor} : undefined,
-        skip: args.cursor ? 1 : 0,
+        cursor: filters.cursor ? {id: filters.cursor} : undefined,
+        skip: filters.cursor ? 1 : 0,
         orderBy: {
-            date: args.sort
+            date: filters.sort
         },
-        ...filter
+        ...generateQuery(filters)
     })
+}
+
+const generateQuery = (filters: TransactionFilterFields) => {
+    const AND = []
+    AND.push({
+        OR: [
+            {id: {equals: filters.search.string}},
+            {reference: {contains: filters.search.string, mode: 'insensitive'}},
+            {amount: {equals:  parseFloat(filters.search.string) || undefined}},
+            {categoryId: {in:  filters.search.filteredCategories},},
+            {accountId: {in:  [...filters.search.filteredBanks, ...filters.search.filteredAccounts]}},
+        ]
+    } as Prisma.TransactionWhereInput)
+
+    if(filters.banks.length) {
+        AND.push({accountId: {in: filters.banks}})
+    }
+
+    if(filters.account) {
+        AND.push({accountId: {equals: filters.account}})
+    }
+
+    if(filters.startDate) {
+        AND.push({date: {gt: filters.startDate}})
+    }
+
+    if(filters.endDate) {
+        AND.push({date: {lt: filters.endDate}})
+    }
+
+    return {
+        where: {
+            AND: AND
+        }
+    }
 }
