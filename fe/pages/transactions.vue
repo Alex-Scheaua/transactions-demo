@@ -10,9 +10,9 @@
 </template>
 
 <script lang="ts" setup>
+import {ref, useRoute} from "@nuxtjs/composition-api";
 import TransactionFiltersSection from "~/components/transactions/TransactionFilters.vue"
 import TransactionTable from "~/components/transactions/TransactionTable.vue"
-import {ref, useRoute} from "@nuxtjs/composition-api";
 
 const route = ref(useRoute())
 </script>

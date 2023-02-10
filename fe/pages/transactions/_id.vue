@@ -52,14 +52,14 @@ export default {
         const route = ref( useRoute())
         const { store } = useContext()
 
-        const selectedTransaction = computed<Transaction>(() => store.getters["selectedTransaction"])
-        const accounts = computed(() => store.getters["accounts"])
-        const categories = computed(() => store.getters["categories"])
+        const selectedTransaction = computed<Transaction>(() => store.getters.selectedTransaction)
+        const accounts = computed(() => store.getters.accounts)
+        const categories = computed(() => store.getters.categories)
 
         const selectedCategory = computed<Category>(() => categories.value.find((category: Category) => category.id === selectedTransaction.value.categoryId))
         const selectedColor = computed(() => {
             if(selectedCategory.value?.color) {
-                return {['background-color']: `#${selectedCategory.value.color}99`}
+                return {'background-color': `#${selectedCategory.value.color}99`}
             }
         })
         const selectedAccount = computed<Account>(() => accounts.value.find((account: Account) => account.id === selectedTransaction.value.accountId))

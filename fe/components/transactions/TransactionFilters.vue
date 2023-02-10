@@ -6,7 +6,6 @@
             </label>
             <input
                 :value="filters.search.string"
-                id="searchInput"
                 class="w-full h-10 rounded-md border border-gray-300 px-5 text-sm"
                 @input="createFiltersAndSearch($event.target.value)"
             >
@@ -18,7 +17,6 @@
             </label>
             <select
                 :value="filters.bank"
-                id="bankInput"
                 class="w-full h-10 rounded-md border border-gray-300 bg-transparent py-0 pl-2 pr-7 text-gray-700 text-sm"
                 name="currency"
                 @change="searchTransactions('bank', $event.target.value)"
@@ -36,7 +34,6 @@
             </label>
             <select
                 :value="filters.account"
-                id="accountInput"
                 class="w-full h-10 rounded-md border border-gray-300 bg-transparent py-0 pl-2 pr-7 text-gray-700 text-sm"
                 name="currency"
                 @change="searchTransactions('account', $event.target.value)"
@@ -75,18 +72,17 @@
 </template>
 
 <script lang="ts" setup>
-import type { Account, Category } from "~/interfaces"
-import { banks } from "~/services/networkRequests"
 import { computed, useContext } from "@nuxtjs/composition-api";
+import type { Account, Category } from "~/interfaces"
 import debounce from "~/services/debounce";
 
 const { store } = useContext()
 
-const filters = computed(() => store.getters["filters"])
+const filters = computed(() => store.getters.filters)
 
-const accounts = computed(() => store.getters["accounts"])
-const categories = computed(() => store.getters["categories"])
-const banks = computed(() => store.getters["banks"])
+const accounts = computed(() => store.getters.accounts)
+const categories = computed(() => store.getters.categories)
+const banks = computed(() => store.getters.banks)
 
 const setDate = (stringDate: string, type: 'startDate' | 'endDate') => {
     const dateArray = stringDate.split('/')
@@ -116,23 +112,23 @@ const searchTransactions = (key: 'bank'| 'account' | 'sort', value: string) => {
 
 const createFiltersAndSearch = (search: string) => {
     debounce(() => {
-        let filteredAccounts = accounts.value
+        const filteredAccounts = accounts.value
             .filter((account: Account) => account.name.toLowerCase().includes(search.toLowerCase()))
             .map((account: Account) => account.id)
 
-        let filteredCategories = categories.value
+        const filteredCategories = categories.value
             .filter((category: Category) => category.name.toLowerCase().includes(search.toLowerCase()))
             .map((category: Category) => category.id)
 
-        let filteredBanks = accounts.value
+        const filteredBanks = accounts.value
             .filter((account: Account) => account.bank.toLowerCase().includes(search.toLowerCase()))
             .map((category: Category) => category.id)
 
         store.dispatch('setSearch', {
             string: search,
-            filteredAccounts: filteredAccounts,
-            filteredCategories: filteredCategories,
-            filteredBanks: filteredBanks,
+            filteredAccounts,
+            filteredCategories,
+            filteredBanks,
         })
         store.dispatch('getTransactions')
     })

@@ -57,14 +57,14 @@
 </template>
 
 <script lang="ts" setup>
-import TransactionTableRow from "~/components/transactions/TransactionTableRow.vue"
 import {computed, useContext} from "@nuxtjs/composition-api"
+import TransactionTableRow from "~/components/transactions/TransactionTableRow.vue"
 const { store } = useContext()
 
-const transactions = computed(() => store.getters["transactions"])
-const categories = computed(() => store.getters["categories"])
-const loading = computed(() => store.getters["loading"])
-const lastBatch = computed(() => store.getters["lastBatch"])
+const transactions = computed(() => store.getters.transactions)
+const categories = computed(() => store.getters.categories)
+const loading = computed(() => store.getters.loading)
+const lastBatch = computed(() => store.getters.lastBatch)
 </script>
 
 <style scoped>
