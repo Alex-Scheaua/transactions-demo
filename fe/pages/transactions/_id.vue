@@ -49,7 +49,7 @@ export default {
         mode: 'in-out'
     },
     setup() {
-        const route = ref( useRoute())
+        const route = ref(useRoute())
         const { store } = useContext()
 
         const selectedTransaction = computed<Transaction>(() => store.getters.selectedTransaction)
