@@ -43,7 +43,7 @@
                     <td colspan="4" class="text-center">
                         <button
                             class="w-full hover:text-blue-700"
-                            @click="store.dispatch('getTransactions')"
+                            @click="store.dispatch('getTransactions', {loadMore: true})"
                         >
                             Load more trasactions...
                         </button>

@@ -80,7 +80,7 @@ const banks = computed(() => store.getters["banks"])
 
 const searchTransactions = (key: 'bank'| 'account' | 'sort', value: string) => {
     store.dispatch('setFilter', {key, value})
-    debounce(() => store.dispatch('getTransactions', filters))
+    debounce(() => store.dispatch('getTransactions'))
 }
 
 const createFiltersAndSearch = (search: string) => {

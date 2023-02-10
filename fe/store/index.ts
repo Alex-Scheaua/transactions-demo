@@ -55,11 +55,9 @@ export const getters = {
 }
 
 export const mutations = {
-    SET_TRANSACTIONS(state: State, transactions: Transaction[]) {
-        if(transactions.length) {
-            state.transactions.push(...transactions);
-            state.filters.cursor = transactions[transactions.length-1].id;
-        }
+    SET_TRANSACTIONS(state: State, { transactions, loadMore }: { transactions: Transaction[], loadMore: boolean }) {
+        state.transactions = loadMore ? [...state.transactions, ...transactions] : transactions
+        state.filters.cursor = transactions.length ? transactions[transactions.length-1].id : '';
         state.lastBatch = transactions.length < 20
     },
     SET_SELECTED_TRANSACTION(state: State, selectedTransaction: Transaction[]) {
@@ -92,12 +90,12 @@ export const actions = {
         await dispatch('getAccounts')
         await dispatch('getBanks')
     },
-    async getTransactions({commit, state}: { commit: Commit, state: State }) {
+    async getTransactions({commit, state}: { commit: Commit, state: State }, loadMore: boolean) {
         commit('SET_LOADING', true)
         try {
             const transactionsList = (await transactions(state.filters)).data.transactions
 
-            commit('SET_TRANSACTIONS', transactionsList)
+            commit('SET_TRANSACTIONS', { transactions: transactionsList, loadMore })
         } catch (e) {
             console.error(e)
         }
