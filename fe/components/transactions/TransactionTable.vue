@@ -1,5 +1,5 @@
 <template>
-    <div
+    <div class="flex mb-6 overflow-hidden relative">
         class="flex flex-col flex-grow mb-6 w-5/6 relative border border-gray-100 rounded-md"
         :class="loading ? 'overflow-hidden' : 'overflow-y-auto'"
     >
@@ -7,6 +7,10 @@
             <div class="loader ease-linear rounded-full border-4 border-t-4 border-gray-200 h-12 w-12 mb-4"></div>
             <h2 class="text-center text-white text-xl font-semibold">Loading...</h2>
         </div>
+        <div
+            class="flex flex-col flex-grow w-full border border-gray-100 rounded-md"
+            :class="loading ? 'overflow-hidden' : 'overflow-y-auto'"
+        >
         <table class="text-sm text-left text-gray-500 rounded-md">
             <thead class="text-xs text-gray-700 uppercase">
                 <tr>
@@ -39,17 +43,19 @@
             </tbody>
         </table>
     </div>
+    </div>
+
 </template>
 
 <script lang="ts" setup>
 import TransactionTableRow from "~/components/transactions/TransactionTableRow.vue"
-import {computed, onServerPrefetch, useContext} from "@nuxtjs/composition-api"
+import {computed, useContext} from "@nuxtjs/composition-api"
 const { store } = useContext()
 
-onServerPrefetch(async () =>{
-    if(!transactions.value.length) {
-        await store.dispatch('store/getTransactions')
-    }
+const transactions = computed(() => store.getters["transactions"])
+const categories = computed(() => store.getters["categories"])
+const loading = computed(() => store.getters["loading"])
+const lastBatch = computed(() => store.getters["lastBatch"])
     if(!categories.value.length) {
         await store.dispatch('store/getCategories')
     }

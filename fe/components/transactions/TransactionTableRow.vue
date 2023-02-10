@@ -1,10 +1,10 @@
 <template>
-    <nuxt-link :to="`transaction/${transaction.id}`" tag="tr" class="border-b hover:bg-gray-50 cursor-pointer">
-        <th class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap" scope="row">
-            {{ transaction.reference }}
-        </th>
+    <nuxt-link :to="`/transactions/${transaction.id}`" tag="tr" class="border-b hover:bg-gray-50 cursor-pointer">
+        <td class="px-6 py-4 font-medium whitespace-nowrap" :class="transaction.reference ? 'text-gray-900' : 'text-gray-400'">
+            {{ transaction.reference || 'None provided' }}
+        </td>
         <td class="px-6 py-4 text-black" >
-            <span :style="`background-color: #${category.color}99`" class="p-2 rounded-lg">
+            <span :style="`background-color: #${category.color}99`" class="px-2 py-1 rounded-lg">
                {{ category.name }}
             </span>
         </td>
@@ -14,8 +14,8 @@
         <td class="px-6 py-4 text-right">
             {{ transaction.amount }}
             <span class="text-gray-400">
-          {{ transaction.currency }}
-        </span>
+              {{ transaction.currency }}
+            </span>
         </td>
     </nuxt-link>
 </template>

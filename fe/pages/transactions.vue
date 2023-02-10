@@ -1,6 +1,6 @@
 <template>
-    <div class="flex flex-col items-center h-screen">
-        <h1 class="w-5/6 text-xl font-bold text-gray-700 my-8">
+    <div class="flex flex-col overflow-hidden w-5/6">
+        <h1 class="text-xl font-bold text-gray-700 my-8">
             Transactions
         </h1>
         <transaction-filters-section />

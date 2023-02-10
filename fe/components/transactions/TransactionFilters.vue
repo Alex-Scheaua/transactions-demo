@@ -1,5 +1,5 @@
 <template>
-    <div class="flex w-5/6 mb-14 gap-2">
+    <div class="flex mb-14 gap-2">
         <div>
             <label class="flex items-center h-10 text-sm font-light text-gray-400 px-2" for="searchInput">
                 Search by bank, account, reference, category, data, amount, currency
