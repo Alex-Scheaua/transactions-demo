@@ -60,12 +60,11 @@ const generateQuery = (filters: TransactionFilterFields) => {
     }
 
     if(filters.startDate) {
-        AND.push({date: {gt: filters.startDate}})
+        AND.push({date: {gt: new Date(filters.startDate)}})
     }
 
     if(filters.endDate) {
-        AND.push({date: {lt: filters.endDate}})
+        AND.push({date: {lt: new Date(filters.endDate)}})
     }
-    console.log(JSON.stringify(AND[0]))
     return {where: { AND }}
 }

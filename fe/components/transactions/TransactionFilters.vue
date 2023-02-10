@@ -52,14 +52,24 @@
             <label class="flex items-center h-10 text-sm font-light text-gray-400 px-2" for="startMonthInput">
                 Starting month
             </label>
-            <input id="startMonthInput" class="w-full h-10 rounded-md border border-gray-300 px-5 text-sm">
+            <input
+                id="startMonthInput"
+                class="w-full h-10 rounded-md border border-gray-300 px-5 text-sm"
+                placeholder="ex: yyyy/mm"
+                @blur="setDate($event.target.value, 'startDate')"
+            >
         </div>
 
         <div>
             <label class="flex items-center h-10 text-sm font-light text-gray-400 px-2" for="endMonthInput">
                 Ending month
             </label>
-            <input id="endMonthInput" class="w-full h-10 rounded-md border border-gray-300 px-5 text-sm">
+            <input
+                id="endMonthInput"
+                class="w-full h-10 rounded-md border border-gray-300 px-5 text-sm"
+                placeholder="ex: yyyy/mm"
+                @blur="setDate($event.target.value , 'endDate')"
+            >
         </div>
     </div>
 </template>
@@ -67,7 +77,7 @@
 <script lang="ts" setup>
 import type { Account, Category } from "~/interfaces"
 import { banks } from "~/services/networkRequests"
-import {computed, useContext} from "@nuxtjs/composition-api";
+import { computed, useContext } from "@nuxtjs/composition-api";
 import debounce from "~/services/debounce";
 
 const { store } = useContext()
@@ -78,10 +88,28 @@ const accounts = computed(() => store.getters["accounts"])
 const categories = computed(() => store.getters["categories"])
 const banks = computed(() => store.getters["banks"])
 
+const setDate = (stringDate: string, type: 'startDate' | 'endDate') => {
+    const dateArray = stringDate.split('/')
+    let date: Date
+
+    if(dateArray.length > 1) {
+        if(type === 'startDate'){
+            date = new Date(parseInt(dateArray[0]), parseInt(dateArray[1]) - 1, parseInt(dateArray[2]) || 1)
+        } else {
+            date = new Date(parseInt(dateArray[0]), parseInt(dateArray[1]) - (parseInt(dateArray[2]) ? 1 : 0), parseInt(dateArray[2]) || 0)
+        }
+
+        if(date.getFullYear()) {
+            store.dispatch('setFilter', {key: type, value: date})
+            debounce(() => store.dispatch('getTransactions'))
+        }
+    }
+}
+
 const searchTransactions = (key: 'bank'| 'account' | 'sort', value: string) => {
     store.dispatch('setFilter', {key, value})
     if(key === 'bank') {
-        store.dispatch('setFilter', {key: 'banks',value: banks.value.find((bank) => bank.name === value)?.ids || []})
+        store.dispatch('setFilter', {key: 'banks',value: banks.value.find((bank: { name: string; }) => bank.name === value)?.ids || []})
     }
     debounce(() => store.dispatch('getTransactions'))
 }

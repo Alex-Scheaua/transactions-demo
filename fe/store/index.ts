@@ -98,9 +98,10 @@ export const actions = {
             if(state.filters.bank) {
                 state.filters.banks = state.banks.find((bank: Bank) => bank.name === state.filters.bank)?.ids || []
             }
+
             const filters = {
                 ...state.filters,
-                cursor: loadMore ? state.filters.cursor : '',
+                cursor: loadMore ? state.filters.cursor : ''
             }
             const transactionsList = (await transactions(filters)).data.transactions
 
