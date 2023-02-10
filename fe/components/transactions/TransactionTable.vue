@@ -26,6 +26,13 @@
                 </tr>
                 </thead>
                 <tbody>
+                <tr v-if="!transactions.length">
+                    <td colspan="4" class="text-center">
+                        <span class="w-full">
+                            No transactions were found...
+                        </span>
+                    </td>
+                </tr>
                 <transaction-table-row
                     v-for="transaction in transactions"
                     :key="transaction.id"
