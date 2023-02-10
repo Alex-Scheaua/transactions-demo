@@ -25,6 +25,7 @@ export const getTransactions = (args: TransactionFilterFields) => {
         AND: [
             {
                 OR: [
+                    {id: {equals: args.search.string}},
                     {reference: {contains: args.search.string, mode: 'insensitive'}},
                     {amount: {equals:  parseFloat(args.search.string) || undefined}},
                     {categoryId: {in:  args.search.filteredCategories},},
@@ -40,6 +41,8 @@ export const getTransactions = (args: TransactionFilterFields) => {
 
     return prisma.transaction.findMany({
         take: 20,
+        cursor: args.cursor ? {id: args.cursor} : undefined,
+        skip: args.cursor ? 1 : 0,
         orderBy: {
             date: args.sort
         },

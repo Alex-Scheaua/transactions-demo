@@ -5,12 +5,17 @@
         </h1>
         <transaction-filters-section />
         <transaction-table />
+        <nuxt-child v-show="route.params.id" />
     </div>
 </template>
 
 <script lang="ts" setup>
 import TransactionFiltersSection from "~/components/transactions/TransactionFilters.vue"
 import TransactionTable from "~/components/transactions/TransactionTable.vue"
+import {ref, useRoute} from "@nuxtjs/composition-api";
+
+const route = ref(useRoute())
 </script>
 
-<style scoped></style>
+<style scoped>
+</style>

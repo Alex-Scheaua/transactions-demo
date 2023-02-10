@@ -67,25 +67,20 @@
 <script lang="ts" setup>
 import type { Account, Category } from "~/interfaces"
 import { banks } from "~/services/networkRequests"
-import {computed, onServerPrefetch, useContext} from "@nuxtjs/composition-api";
+import {computed, useContext} from "@nuxtjs/composition-api";
 import debounce from "~/services/debounce";
 
 const { store } = useContext()
 
-const filters = computed(() => store.getters["store/filters"])
+const filters = computed(() => store.getters["filters"])
 
-onServerPrefetch(() => {
-    store.dispatch('store/getAccounts')
-    store.dispatch('store/getBanks')
-})
-
-const accounts = computed(() => store.getters["store/accounts"])
-const categories = computed(() => store.getters["store/categories"])
-const banks = computed(() => store.getters["store/banks"])
+const accounts = computed(() => store.getters["accounts"])
+const categories = computed(() => store.getters["categories"])
+const banks = computed(() => store.getters["banks"])
 
 const searchTransactions = (key: 'bank'| 'account' | 'sort', value: string) => {
-    store.dispatch('store/setFilter', {key, value})
-    debounce(() => store.dispatch('store/getTransactions', filters))
+    store.dispatch('setFilter', {key, value})
+    debounce(() => store.dispatch('getTransactions', filters))
 }
 
 const createFiltersAndSearch = (search: string) => {
@@ -102,13 +97,13 @@ const createFiltersAndSearch = (search: string) => {
             .filter((account: Account) => account.bank.toLowerCase().includes(search.toLowerCase()))
             .map((account: Account) => account.id)
 
-        store.dispatch('store/setSearch', {
+        store.dispatch('setSearch', {
             string: search,
             filteredAccounts: filteredAccounts,
             filteredCategories: filteredCategories,
             filteredBanks: filteredBanks,
         })
-        store.dispatch('store/getTransactions')
+        store.dispatch('getTransactions')
     })
 }
 </script>

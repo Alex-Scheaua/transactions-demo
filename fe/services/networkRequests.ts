@@ -19,6 +19,7 @@ export const transactions = async (filter: TransactionFilterFields) => {
             $startDate: Date
             $endDate: Date
             $sort: String
+            $cursor: String
         ) {
             transactions(
                 search: {
@@ -32,6 +33,7 @@ export const transactions = async (filter: TransactionFilterFields) => {
                 startDate: $startDate
                 endDate: $endDate
                 sort: $sort
+                cursor: $cursor
             ) {
                 id
                 accountId
@@ -52,6 +54,7 @@ export const transactions = async (filter: TransactionFilterFields) => {
             startDate: filter.startDate,
             endDate: filter.endDate,
             sort: filter.sort || 'desc',
+            cursor: filter.cursor
         }
     })
 }

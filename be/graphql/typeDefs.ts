@@ -33,7 +33,7 @@ input Search {
 }
 
 type Query {
-    transactions(search: Search, bank: String, account: String, startDate: Date, endDate: Date, sort: String): [Transaction]
+    transactions(search: Search, bank: String, account: String, startDate: Date, endDate: Date, sort: String, cursor: String): [Transaction]
     accounts: [Account]
     banks: [Bank]
     categories: [Category]
