@@ -6,11 +6,10 @@
     "start": "yarn compose && concurrently \"yarn start-fe\" \"yarn start-be\"",
     "start-fe": "yarn --cwd ./fe dev",
     "start-be": "yarn --cwd ./be start",
-    "setup": "yarn setup-db && yarn -i && concurrently \"yarn setup-fe\" \"yarn setup-be\"",
-    "setup-fe": "yarn --cwd ./fe -i",
-    "setup-be": "yarn --cwd ./be -i",
-    "setup-db": "yarn compose && node migrate-db.js && yarn --cwd ./be seed",
-    "compose": "docker-compose -f db/compose-db.yml up -d"
+    "setup": "yarn compose && yarn setup-modules && yarn migrate-and-seed",
+    "compose": "docker-compose -f db/compose-db.yml up -d",
+    "setup-modules": "yarn -i && concurrently \"yarn --cwd ./fe -i\" \"yarn --cwd ./be -i\"",
+    "migrate-and-seed": "node migrate-db.js && yarn --cwd ./be seed"
   },
   "devDependencies": {
     "concurrently": "^7.6.0"
