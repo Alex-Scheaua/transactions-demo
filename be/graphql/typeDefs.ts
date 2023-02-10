@@ -1,29 +1,29 @@
 export const typeDefs = `#graphql
 scalar Date
 type Transaction {
-    id: String
-    accountId: String
-    categoryId: String
+    id: String!
+    accountId: String!
+    categoryId: String!
     reference: String
-    amount: Float
-    currency: String
-    date: Date
+    amount: Float!
+    currency: String!
+    date: Date!
 }
 
 type Account {
-    id: String
-    name: String
-    bank: String
+    id: String!
+    name: String!
+    bank: String!
 }
 
 type Category {
-    id: String
-    name: String
+    id: String!
+    name: String!
     color: String
 }
 type Bank {
-    name: String
-    ids: [String]
+    name: String!
+    ids: [String]!
 }
 
 input Search {

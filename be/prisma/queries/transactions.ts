@@ -9,8 +9,8 @@ export interface TransactionFilterFields {
         filteredBanks: Id[]
         filteredCategories: Id[]
     }
-    banks: string[]
-    account: string
+    banks: Id[]
+    account: Id
     startDate?: Date | null
     endDate?: Date | null
     sort: 'desc' | 'asc'
@@ -31,22 +31,32 @@ export const getTransactions = (filters: TransactionFilterFields) => {
 
 const generateQuery = (filters: TransactionFilterFields) => {
     const AND = []
-    AND.push({
-        OR: [
-            {id: {equals: filters.search.string}},
-            {reference: {contains: filters.search.string, mode: 'insensitive'}},
-            {amount: {equals:  parseFloat(filters.search.string) || undefined}},
-            {categoryId: {in:  filters.search.filteredCategories},},
-            {accountId: {in:  [...filters.search.filteredBanks, ...filters.search.filteredAccounts]}},
-        ]
-    } as Prisma.TransactionWhereInput)
+    const OR = []
+
+    if(filters.search.string) {
+        OR.push({id: {equals: filters.search.string}})
+        OR.push({reference: {contains: filters.search.string, mode: 'insensitive'}})
+        if(Number(filters.search.string)) {
+            OR.push({amount: {equals: parseFloat(filters.search.string)}})
+        }
+    }
+    if(filters.search.filteredBanks.length || filters.search.filteredAccounts.length) {
+        OR.push({accountId: {in: [...filters.search.filteredBanks, ...filters.search.filteredAccounts]}})
+    }
+    if(filters.search.filteredCategories.length) {
+        OR.push({categoryId: {in: filters.search.filteredCategories}})
+    }
+
+    if(OR.length) {
+        AND.push({OR} as Prisma.TransactionWhereInput)
+    }
 
     if(filters.banks.length) {
         AND.push({accountId: {in: filters.banks}})
     }
 
     if(filters.account) {
-        AND.push({accountId: {equals: filters.account}})
+        AND.push({accountId: filters.account})
     }
 
     if(filters.startDate) {
@@ -56,10 +66,6 @@ const generateQuery = (filters: TransactionFilterFields) => {
     if(filters.endDate) {
         AND.push({date: {lt: filters.endDate}})
     }
-
-    return {
-        where: {
-            AND: AND
-        }
-    }
+    console.log(JSON.stringify(AND[0]))
+    return {where: { AND }}
 }

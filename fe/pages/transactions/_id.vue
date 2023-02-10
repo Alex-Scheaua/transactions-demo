@@ -24,7 +24,7 @@
 
                        <div class="text-right col-span-1 font-semibold">Category:</div>
                        <div class="col-span-2">
-                           <span class="px-2 py-1 rounded-md" :style="`background-color: #${selectedCategory?.color}99`">
+                           <span class="px-2 py-1 rounded-md" :style="selectedColor">
                                {{ selectedCategory?.name }}
                            </span>
                        </div>
@@ -57,6 +57,11 @@ export default {
         const categories = computed(() => store.getters["categories"])
 
         const selectedCategory = computed<Category>(() => categories.value.find((category: Category) => category.id === selectedTransaction.value.categoryId))
+        const selectedColor = computed(() => {
+            if(selectedCategory.value?.color) {
+                return {['background-color']: `#${selectedCategory.value.color}99`}
+            }
+        })
         const selectedAccount = computed<Account>(() => accounts.value.find((account: Account) => account.id === selectedTransaction.value.accountId))
 
         onMounted(() => {
@@ -67,7 +72,7 @@ export default {
             return route.value.params.id && store.dispatch('getSelectedTransaction', route.value.params.id)
         })
 
-        return {route, selectedTransaction, selectedAccount, selectedCategory}
+        return {route, selectedTransaction, selectedAccount, selectedCategory, selectedColor}
     }
 }
 
