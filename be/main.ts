@@ -12,7 +12,7 @@ import { resolvers } from "./graphql/resolvers.js";
 
     const { url } = await startStandaloneServer(server, {
         listen: {
-            port: 4000
+            port: process.env.server_port
         }
     })
 
