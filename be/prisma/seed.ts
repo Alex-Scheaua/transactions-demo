@@ -27,7 +27,7 @@ interface CategoryRow {
 const dbFilesUrl = 'https://raw.githubusercontent.com/Alex-Scheaua/transactions-demo/master/db/data'
 
 const handleTransactions = async () => {
-    console.log("Seeding Transactions. Please wait...")
+    console.log("Seeding Database. This may take ~5 minutes. Please wait...")
     return new Promise<void>(async resolve => {
         https.get(`${dbFilesUrl}/transactions.csv`, stream => {
             stream
@@ -57,7 +57,6 @@ const handleTransactions = async () => {
 }
 
 const handleAccounts = async () => {
-    console.log("Seeding Accounts")
     return new Promise<void>((resolve) => {
         https.get(`${dbFilesUrl}/accounts.csv`, stream => {
             stream
@@ -87,7 +86,6 @@ const handleAccounts = async () => {
 }
 
 const handleCategories = async () => {
-    console.log("Seeding Categories")
     return new Promise<void>((resolve) => {
         https.get(`${dbFilesUrl}/categories.csv`, stream => {
             stream
@@ -112,6 +110,6 @@ const handleCategories = async () => {
     })
 }
 
-handleTransactions().then(() => console.log('Transactions seeded'))
-handleCategories().then(() => console.log('Categories seeded'))
-handleAccounts().then(() => console.log('Accounts seeded'))
+Promise.all([handleTransactions(), handleAccounts(), handleCategories()])
+  .then(() => console.log('Database seeded'))
+  .catch(err => console.error(err));
