@@ -24,7 +24,7 @@ interface CategoryRow {
     color: string
 }
 
-const dbFilesUrl = 'https://raw.githubusercontent.com/fridayfinance/challenges/main/dev-fullstack/data'
+const dbFilesUrl = 'https://raw.githubusercontent.com/Alex-Scheaua/transactions-demo/master/db/data'
 
 const handleTransactions = async () => {
     console.log("Seeding Transactions. Please wait...")
